@@ -78,10 +78,11 @@ class Demo extends React.Component {
         <div className="row m-b-3">
           <div className="col-xs-12 col-md-6">
             <CalendarHeatmap
+              tooltipEnabled
+              tooltipPrefix="Total:"
               values={randomValues}
               classForValue={githubClassForValue}
               titleForValue={customTitleForValue}
-              tooltipDataAttrs={customTooltipDataAttrs}
               onClick={customOnClick}
             />
           </div>

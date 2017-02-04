@@ -13,6 +13,7 @@ class CalendarHeatmap extends React.Component {
 
     this.state = {
       valueCache: this.getValueCache(props.values),
+      tooltip: null,
     };
   }
 
@@ -177,13 +178,23 @@ class CalendarHeatmap extends React.Component {
       this.props.onClick(value);
     }
   }
+  onMouseEnter(opts) {
+    if (!this.props.tooltipEnabled) return null;
+    this.setState({ tooltip: opts });
+  }
 
-  renderSquare(dayIndex, index) {
+  onMouseLeave() {
+    if (!this.props.tooltipEnabled) return null;
+    this.setState({ tooltip: null });
+  }
+
+  renderSquare(dayIndex, index, weekIndex) {
     const indexOutOfRange = index < this.getNumEmptyDaysAtStart() || index >= this.getNumEmptyDaysAtStart() + this.props.numDays;
     if (indexOutOfRange && !this.props.showOutOfRangeDays) {
       return null;
     }
     const [x, y] = this.getSquareCoordinates(dayIndex);
+    const value = this.getValueForIndex(index);
     return (
       <rect
         key={index}
@@ -193,7 +204,9 @@ class CalendarHeatmap extends React.Component {
         y={y}
         title={this.getTitleForIndex(index)}
         className={this.getClassNameForIndex(index)}
-        onClick={this.handleClick.bind(this, this.getValueForIndex(index))}
+        onClick={this.handleClick.bind(this, value)}
+        onMouseEnter={this.onMouseEnter.bind(this, { x, y, weekIndex, value })}
+        onMouseLeave={this.onMouseLeave.bind(this)}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
     );
@@ -202,7 +215,7 @@ class CalendarHeatmap extends React.Component {
   renderWeek(weekIndex) {
     return (
       <g key={weekIndex} transform={this.getTransformForWeek(weekIndex)}>
-        {range(DAYS_IN_WEEK).map(dayIndex => this.renderSquare(dayIndex, (weekIndex * DAYS_IN_WEEK) + dayIndex))}
+        {range(DAYS_IN_WEEK).map(dayIndex => this.renderSquare(dayIndex, (weekIndex * DAYS_IN_WEEK) + dayIndex, weekIndex))}
       </g>
     );
   }
@@ -231,6 +244,39 @@ class CalendarHeatmap extends React.Component {
     });
   }
 
+  renderTooltip() {
+    if (!this.state.tooltip) return null
+    const HALF_SQUARE = SQUARE_SIZE * 0.5
+    const TEXT_SIZE = 8
+    const {x, y, weekIndex, value} = this.state.tooltip
+    const text = `${this.props.tooltipPrefix} ${value.count}`
+    const width = text.length * TEXT_SIZE
+    const offset = width * 0.5 - HALF_SQUARE
+
+    return (
+      <g transform={this.getTransformForWeek(weekIndex)}>
+        <rect
+          transform={`translate(${x - offset}, ${y})`}
+          fill="#000"
+          fillOpacity="0.8"
+          rx={3}
+          ry={3}
+          height={15}
+          width={width}
+        />
+
+        <text
+          fill="#fff"
+          textAnchor="middle"
+          stroke="none"
+          fontSize={TEXT_SIZE}
+          transform={`translate(${x + HALF_SQUARE}, ${y + SQUARE_SIZE})`}>
+          {text}
+        </text>
+      </g>
+    )
+  }
+
   render() {
     return (
       <svg
@@ -243,6 +289,7 @@ class CalendarHeatmap extends React.Component {
         <g transform={this.getTransformForAllWeeks()}>
           {this.renderAllWeeks()}
         </g>
+        {this.renderTooltip()}
       </svg>
     );
   }
