@@ -63,6 +63,11 @@ const DemoItem = (props) => (
 );
 
 class Demo extends React.Component {
+  onMouseEnter(e, value) {
+    console.log(e.clientX)
+  }
+  onMouseLeave() {
+  }
   render() {
     return (
       <div className="container">
@@ -78,8 +83,8 @@ class Demo extends React.Component {
         <div className="row m-b-3">
           <div className="col-xs-12 col-md-6">
             <CalendarHeatmap
-              tooltipEnabled
-              tooltipPrefix="Total:"
+              onMouseEnter={this.onMouseEnter}
+              onMouseLeave={this.onMouseLeave}
               values={randomValues}
               classForValue={githubClassForValue}
               titleForValue={customTitleForValue}

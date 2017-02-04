@@ -205,8 +205,8 @@ class CalendarHeatmap extends React.Component {
         title={this.getTitleForIndex(index)}
         className={this.getClassNameForIndex(index)}
         onClick={this.handleClick.bind(this, value)}
-        onMouseEnter={this.onMouseEnter.bind(this, { x, y, weekIndex, value })}
-        onMouseLeave={this.onMouseLeave.bind(this)}
+        onMouseEnter={(e) => this.props.onMouseEnter ? this.props.onMouseEnter(e, value) : null}
+        onMouseLeave={(e) => this.props.onMouseLeave ? this.props.onMouseLeave(e, value) : null}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
     );
@@ -244,40 +244,6 @@ class CalendarHeatmap extends React.Component {
     });
   }
 
-  renderTooltip() {
-    if (!this.state.tooltip) return null
-    const {x, y, weekIndex, value} = this.state.tooltip
-    if (!value) return null
-    const HALF_SQUARE = SQUARE_SIZE * 0.5
-    const TEXT_SIZE = 8
-    const text = `${this.props.tooltipPrefix} ${value.count}`
-    const width = text.length * TEXT_SIZE
-    const offset = width * 0.5 - HALF_SQUARE
-
-    return (
-      <g transform={this.getTransformForWeek(weekIndex)}>
-        <rect
-          transform={`translate(${x - offset}, ${y})`}
-          fill="#000"
-          fillOpacity="0.8"
-          rx={3}
-          ry={3}
-          height={15}
-          width={width}
-        />
-
-        <text
-          fill="#fff"
-          textAnchor="middle"
-          stroke="none"
-          fontSize={TEXT_SIZE}
-          transform={`translate(${x + HALF_SQUARE}, ${y + SQUARE_SIZE})`}>
-          {text}
-        </text>
-      </g>
-    )
-  }
-
   render() {
     return (
       <svg
@@ -290,7 +256,6 @@ class CalendarHeatmap extends React.Component {
         <g transform={this.getTransformForAllWeeks()}>
           {this.renderAllWeeks()}
         </g>
-        {this.renderTooltip()}
       </svg>
     );
   }
