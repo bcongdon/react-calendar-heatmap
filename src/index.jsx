@@ -246,9 +246,10 @@ class CalendarHeatmap extends React.Component {
 
   renderTooltip() {
     if (!this.state.tooltip) return null
+    const {x, y, weekIndex, value} = this.state.tooltip
+    if (!value) return null
     const HALF_SQUARE = SQUARE_SIZE * 0.5
     const TEXT_SIZE = 8
-    const {x, y, weekIndex, value} = this.state.tooltip
     const text = `${this.props.tooltipPrefix} ${value.count}`
     const width = text.length * TEXT_SIZE
     const offset = width * 0.5 - HALF_SQUARE
