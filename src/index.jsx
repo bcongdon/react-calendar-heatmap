@@ -196,8 +196,8 @@ class CalendarHeatmap extends React.Component {
         title={this.getTitleForIndex(index)}
         className={this.getClassNameForIndex(index)}
         onClick={this.handleClick.bind(this, value)}
-        onMouseOver={(e) => this.props.onMouseOver ? this.props.onMouseOver(e, value) : null}
-        onMouseLeave={(e) => this.props.onMouseLeave ? this.props.onMouseLeave(e, value) : null}
+        onMouseOver={(e) => this.props.handleMouseOver ? this.props.handleMouseOver(e, value) : null}
+        onMouseLeave={(e) => this.props.handleMouseLeave ? this.props.handleMouseLeave(e, value) : null}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
     );
