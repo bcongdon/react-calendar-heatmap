@@ -179,15 +179,15 @@ class CalendarHeatmap extends React.Component {
     }
   }
 
-  handleMouseOver(value) {
+  handleMouseOver(value, e) {
     if (this.props.onMouseOver) {
-      this.props.onMouseOver(value);
+      this.props.onMouseOver(value, e);
     }
   }
 
-  handleMouseLeave(value) {
+  handleMouseLeave(value, e) {
     if (this.props.onMouseLeave) {
-      this.props.onMouseLeave(value);
+      this.props.onMouseLeave(value, e);
     }
   }
 

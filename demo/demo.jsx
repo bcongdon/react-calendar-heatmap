@@ -63,8 +63,8 @@ const DemoItem = (props) => (
 );
 
 class Demo extends React.Component {
-  onMouseOver(value) {
-    console.log(value)
+  onMouseOver(value, e) {
+    console.log(value, e)
   }
   onMouseLeave(value) {
     console.log(value)
