@@ -180,14 +180,14 @@ class CalendarHeatmap extends React.Component {
   }
 
   handleMouseOver(value) {
-    if (this.props.mouseOver) {
-      this.props.mouseOver(value);
+    if (this.props.onMouseOver) {
+      this.props.onMouseOver(value);
     }
   }
 
   handleMouseLeave(value) {
-    if (this.props.mouseLeave) {
-      this.props.mouseLeave(value);
+    if (this.props.onMouseLeave) {
+      this.props.onMouseLeave(value);
     }
   }
 
@@ -208,8 +208,8 @@ class CalendarHeatmap extends React.Component {
         title={this.getTitleForIndex(index)}
         className={this.getClassNameForIndex(index)}
         onClick={this.handleClick.bind(this, value)}
-        onMouseOver={(e) => this.props.handleMouseOver ? this.props.handleMouseOver.bind(this, e, value) : null}
-        onMouseLeave={(e) => this.props.handleMouseLeave ? this.props.handleMouseLeave.bind(this, e, value) : null}
+        onMouseOver={this.handleMouseOver.bind(this, value)}
+        onMouseLeave={this.handleMouseLeave.bind(this, value)}
         {...this.getTooltipDataAttrsForIndex(index)}
       />
     );
@@ -280,6 +280,8 @@ CalendarHeatmap.propTypes = {
   titleForValue: PropTypes.func,         // function which returns title text for value
   classForValue: PropTypes.func,         // function which returns html class for value
   onClick: PropTypes.func,               // callback function when a square is clicked
+  onMouseOver: PropTypes.func,           // callback function when the mouse enters a square
+  onMouseLeave: PropTypes.func,          // callback function when the mouse leaves a square
 };
 
 CalendarHeatmap.defaultProps = {
